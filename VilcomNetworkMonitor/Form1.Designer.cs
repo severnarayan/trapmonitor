@@ -30,16 +30,17 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.TrapGrid = new System.Windows.Forms.DataGridView();
-            this.GridHostname = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.GridTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.GridCommunity = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.GridSeverity = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.GridData = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.button1 = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.TextLog = new System.Windows.Forms.RichTextBox();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
+            this.GridHostname = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.GridTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.GridCommunity = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.GridSeverity = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.EventDescr = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Data = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.TrapGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -52,40 +53,13 @@
             this.GridTime,
             this.GridCommunity,
             this.GridSeverity,
-            this.GridData});
+            this.EventDescr,
+            this.Data});
             this.TrapGrid.Location = new System.Drawing.Point(12, 154);
             this.TrapGrid.Name = "TrapGrid";
             this.TrapGrid.Size = new System.Drawing.Size(772, 397);
             this.TrapGrid.TabIndex = 0;
             this.TrapGrid.DoubleClick += new System.EventHandler(this.TrapGrid_DoubleClick);
-            // 
-            // GridHostname
-            // 
-            this.GridHostname.FillWeight = 150F;
-            this.GridHostname.HeaderText = "IP-адрес сервера";
-            this.GridHostname.Name = "GridHostname";
-            this.GridHostname.Width = 130;
-            // 
-            // GridTime
-            // 
-            this.GridTime.HeaderText = "Время";
-            this.GridTime.Name = "GridTime";
-            // 
-            // GridCommunity
-            // 
-            this.GridCommunity.HeaderText = "Community";
-            this.GridCommunity.Name = "GridCommunity";
-            // 
-            // GridSeverity
-            // 
-            this.GridSeverity.HeaderText = "Severity";
-            this.GridSeverity.Name = "GridSeverity";
-            // 
-            // GridData
-            // 
-            this.GridData.HeaderText = "Trap Data";
-            this.GridData.Name = "GridData";
-            this.GridData.Width = 200;
             // 
             // button1
             // 
@@ -135,11 +109,45 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
+            // GridHostname
+            // 
+            this.GridHostname.FillWeight = 150F;
+            this.GridHostname.HeaderText = "IP-адрес сервера";
+            this.GridHostname.Name = "GridHostname";
+            this.GridHostname.Width = 150;
+            // 
+            // GridTime
+            // 
+            this.GridTime.HeaderText = "Время";
+            this.GridTime.Name = "GridTime";
+            this.GridTime.Width = 120;
+            // 
+            // GridCommunity
+            // 
+            this.GridCommunity.HeaderText = "Community";
+            this.GridCommunity.Name = "GridCommunity";
+            // 
+            // GridSeverity
+            // 
+            this.GridSeverity.HeaderText = "Severity";
+            this.GridSeverity.Name = "GridSeverity";
+            // 
+            // EventDescr
+            // 
+            this.EventDescr.HeaderText = "EventDescr";
+            this.EventDescr.Name = "EventDescr";
+            this.EventDescr.Width = 150;
+            // 
+            // Data
+            // 
+            this.Data.HeaderText = "Data";
+            this.Data.Name = "Data";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(796, 561);
+            this.ClientSize = new System.Drawing.Size(795, 561);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.TextLog);
@@ -158,15 +166,16 @@
 
         private System.Windows.Forms.DataGridView TrapGrid;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn GridHostname;
-        private System.Windows.Forms.DataGridViewTextBoxColumn GridTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn GridCommunity;
-        private System.Windows.Forms.DataGridViewTextBoxColumn GridSeverity;
-        private System.Windows.Forms.DataGridViewTextBoxColumn GridData;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.RichTextBox TextLog;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn GridHostname;
+        private System.Windows.Forms.DataGridViewTextBoxColumn GridTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn GridCommunity;
+        private System.Windows.Forms.DataGridViewTextBoxColumn GridSeverity;
+        private System.Windows.Forms.DataGridViewTextBoxColumn EventDescr;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Data;
     }
 }
 

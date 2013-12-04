@@ -19,23 +19,69 @@ namespace VilcomNetworkMonitor
     {
         public VilcomConfiguration conf;
 
+        public UdpClient Client;
+
         //public static ManualResetEvent allDone = new ManualResetEvent(false);
 
         public Form1()
         {
             InitializeComponent();
+            System.Windows.Forms.Control.CheckForIllegalCrossThreadCalls = false;
 
             this.conf = new VilcomConfiguration();
             this.conf = this.conf.loadFromFile();
+            Client = new UdpClient(conf.port);
         }        
 
         private void button1_Click(object sender, EventArgs e)
-        {
-             
-             AsynchronousSocketListener.startListening();
+        {             
+            //Client uses as receive udp client           
+
+            try
+            {
+                 Client.BeginReceive(new AsyncCallback(recv), null);
+                 MessageBox.Show("ok");
+            }
+            catch(Exception ex)
+            {
+                 MessageBox.Show(ex.ToString());
+            }
+            //CallBack
+            
         }
 
-        private void _debug(String msg)
+        private void recv(IAsyncResult res)
+        {
+            IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
+            byte[] received = Client.EndReceive(res, ref RemoteIpEndPoint);
+
+            //Process codes
+
+            MessageBox.Show(Encoding.UTF8.GetString(received));
+            
+            SnmpV2Packet pkt = new SnmpV2Packet();
+            pkt.decode(received, received.Length);
+
+            _debug("Получен TRAP с адреса " + RemoteIpEndPoint.ToString());
+
+            string trapData = "";
+
+            foreach (Vb v in pkt.Pdu.VbList)
+            {
+                trapData = String.Concat(trapData, "**** " +
+                   v.Oid.ToString() + " " +
+                   SnmpConstants.GetTypeName(v.Value.Type) + " " +
+                   v.Value.ToString());
+            }           
+
+
+
+            addTrapToGrid(RemoteIpEndPoint.ToString(), trapData, pkt);
+
+            Client.BeginReceive(new AsyncCallback(recv), null);
+        }
+
+        public void _debug(String msg)
         {
             TextLog.AppendText(Environment.NewLine + DateTime.Now.ToString("MM/dd/yyyy  h:mm  tt") + msg);
         }
@@ -51,8 +97,28 @@ namespace VilcomNetworkMonitor
             row.Cells[0].Value = addr;
             row.Cells[1].Value = this.getTime();
             row.Cells[2].Value = packet.Community.ToString();
-            row.Cells[3].Value = "CLR";
-            row.Cells[4].Value = trapData;               
+
+            try
+            {
+                row.Cells[3].Value = packet.Pdu.VbList["1.3.6.1.4.1.4100.4.1.2.2.5.1.1.4.1150"].Value.ToString();
+            }
+            catch(Exception e)
+            {
+                row.Cells[3].Value = "can't parse!";
+            }
+
+            //row.Cells[3].Value = "CLR";
+
+            try
+            {
+                row.Cells[4].Value = packet.Pdu.VbList["1.3.6.1.4.1.4100.4.1.2.2.5.1.1.11.1150"].Value.ToString(); 
+            }
+            catch(Exception e)
+            {
+                row.Cells[4].Value = "can't parse!";
+            }
+
+            row.Cells[5].Value = trapData;
 
             TrapGrid.Rows.Add(row); 
         }
@@ -65,13 +131,13 @@ namespace VilcomNetworkMonitor
 
         private void button3_Click(object sender, EventArgs e)
         {
-           
+            MessageBox.Show("Vilcom Network Monitor");
             
         }
 
         private void TrapGrid_DoubleClick(object sender, EventArgs e)
         {
-            Form4 trapWindow = new Form4();
+            Form4 trapWindow = new Form4(TrapGrid.CurrentRow.Cells);
             trapWindow.Show();
         }
 
