@@ -98,9 +98,14 @@ namespace VilcomNetworkMonitor
             row.Cells[1].Value = this.getTime();
             row.Cells[2].Value = packet.Community.ToString();
 
+            MessageBox.Show("данные всего трапа:" + packet.Pdu.ToString());
+
             try
             {
-                row.Cells[3].Value = packet.Pdu.VbList["1.3.6.1.4.1.4100.4.1.2.2.5.1.1.4.1150"].Value.ToString();
+                //row.Cells[3].Value = packet.Pdu.VbList["1.3.6.1.4.1.4100.4.1.2.2.5.1.1.4.1150"].Value.ToString();
+                //MessageBox.Show("данные oid severity:" +packet.Pdu.VbList["1.3.6.1.4.1.4100.4.1.2.2.5.1.1.4.1150"].ToString());
+                
+                
             }
             catch(Exception e)
             {
@@ -131,7 +136,7 @@ namespace VilcomNetworkMonitor
 
         private void button3_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Vilcom Network Monitor");
+           
             
         }
 
