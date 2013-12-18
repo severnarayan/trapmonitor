@@ -24,7 +24,8 @@ namespace VilcomNetworkMonitor
             parent.conf.port = Convert.ToInt32(ConfPort.Text);
             parent.conf.community = ConfCommunity.Text;
             parent.conf.version = ConfVersion.Text;
-            parent.conf.saveToFile();            
+            parent.conf.saveToFile();
+            this.Close();
         }
 
         private void label3_Click(object sender, EventArgs e)
@@ -41,7 +42,7 @@ namespace VilcomNetworkMonitor
 
         private void ConfCommunity_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            
         }
     }
 }

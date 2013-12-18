@@ -14,7 +14,7 @@ namespace VilcomNetworkMonitor
         public Form4(DataGridViewCellCollection data)
         {
             InitializeComponent();
-            richTextBox1.AppendText(data[5].Value.ToString());
+            //richTextBox1.AppendText(data[5].Value.ToString());
             textBox5.Text = data[0].Value.ToString();
             textBox3.Text = data[3].Value.ToString();
             textBox2.Text = data[4].Value.ToString();

@@ -36,11 +36,8 @@ namespace VilcomNetworkMonitor
             // Bind the socket to the local endpoint and listen for incoming connections.
             try
             {
-
-
                 listener.Bind(ep);
-                listener.Listen(100);
-               
+                listener.Listen(100);               
 
                 while (true)
                 {

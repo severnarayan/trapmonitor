@@ -10,3 +10,5 @@ C:\Documents and Settings\User\Рабочий стол\snmp\VilcomNetworkMonitor
 C:\Documents and Settings\User\Рабочий стол\snmp\VilcomNetworkMonitor\VilcomNetworkMonitor\obj\Debug\VilcomNetworkMonitor.Form2.resources
 C:\Documents and Settings\User\Рабочий стол\snmp\VilcomNetworkMonitor\VilcomNetworkMonitor\obj\Debug\VilcomNetworkMonitor.Form4.resources
 C:\Documents and Settings\User\Рабочий стол\snmp\VilcomNetworkMonitor\VilcomNetworkMonitor\obj\Debug\VilcomNetworkMonitor.Form1.resources
+C:\Documents and Settings\User\Рабочий стол\snmp\VilcomNetworkMonitor\VilcomNetworkMonitor\obj\Debug\VilcomNetworkMonitor.Form5.resources
+C:\Documents and Settings\User\Рабочий стол\snmp\VilcomNetworkMonitor\VilcomNetworkMonitor\obj\Debug\VilcomNetworkMonitor.About.resources

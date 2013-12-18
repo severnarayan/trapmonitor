@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -21,7 +23,11 @@ namespace VilcomNetworkMonitor
 
         public UdpClient Client;
 
-        //public static ManualResetEvent allDone = new ManualResetEvent(false);
+        public ArrayList trapList = new ArrayList();
+
+        public int trapListNum = 0;
+
+        public Parser parseConf;
 
         public Form1()
         {
@@ -30,7 +36,27 @@ namespace VilcomNetworkMonitor
 
             this.conf = new VilcomConfiguration();
             this.conf = this.conf.loadFromFile();
-            Client = new UdpClient(conf.port);
+            Client = new UdpClient(conf.port);    
+            
+            //загрузим парсер
+            try
+            {
+
+                parseConf = new Parser();
+
+                parseConf.loadFromFile();
+                foreach (ParserRule ruleConf in parseConf.ruleList)
+                {                  
+                    TrapGrid.Columns.Add(ruleConf.param, ruleConf.name);                    
+                }
+                _debug("Конфигурация парсера загружена!");
+            }
+            catch (Exception excp)
+            {
+                MessageBox.Show("Внимание! Файл конфигурации парсера не найден или был утерян"); 
+            }
+                                   
+
         }        
 
         private void button1_Click(object sender, EventArgs e)
@@ -39,8 +65,7 @@ namespace VilcomNetworkMonitor
 
             try
             {
-                 Client.BeginReceive(new AsyncCallback(recv), null);
-                 MessageBox.Show("ok");
+                 Client.BeginReceive(new AsyncCallback(recv), null);                 
             }
             catch(Exception ex)
             {
@@ -57,7 +82,7 @@ namespace VilcomNetworkMonitor
 
             //Process codes
 
-            MessageBox.Show(Encoding.UTF8.GetString(received));
+           // MessageBox.Show(Encoding.UTF8.GetString(received));
             
             SnmpV2Packet pkt = new SnmpV2Packet();
             pkt.decode(received, received.Length);
@@ -72,12 +97,12 @@ namespace VilcomNetworkMonitor
                    v.Oid.ToString() + " " +
                    SnmpConstants.GetTypeName(v.Value.Type) + " " +
                    v.Value.ToString());
-            }           
+            }
 
-
-
-            addTrapToGrid(RemoteIpEndPoint.ToString(), trapData, pkt);
-
+            Trap trp = new Trap(RemoteIpEndPoint.ToString(), pkt);               
+            //addTrapToList(trp);
+            addTrapToGrid(trp);
+                     
             Client.BeginReceive(new AsyncCallback(recv), null);
         }
 
@@ -86,48 +111,61 @@ namespace VilcomNetworkMonitor
             TextLog.AppendText(Environment.NewLine + DateTime.Now.ToString("MM/dd/yyyy  h:mm  tt") + msg);
         }
 
+        //обновим весь грид с трапами
+        public void reloadGridView()
+        {
+            TrapGrid.Rows.Clear();
+            
+            for (int i = 0; i < trapListNum; i++)
+            {
+                addTrapToGrid((Trap) trapList[i]);
+            }
+        }
+
+        //добавить трап во внутренний список трапов
+        private void addTrapToList(Trap currentTrap)
+        {
+            trapList.Add(currentTrap);
+            trapListNum++;
+        }
+
+        //вернуть текущее время в нормальном виде
         private string getTime()
         {
             return DateTime.Now.ToString("MM/dd/yyyy  h:mm  tt");
         }
 
-        private void addTrapToGrid(string addr, string trapData,SnmpV2Packet packet)
+        //добавить трап в грид
+        private void addTrapToGrid(Trap currentTrap)
         {
-            DataGridViewRow row = (DataGridViewRow)TrapGrid.Rows[0].Clone();
-            row.Cells[0].Value = addr;
-            row.Cells[1].Value = this.getTime();
-            row.Cells[2].Value = packet.Community.ToString();
+            DataGridViewRow row = (DataGridViewRow) TrapGrid.Rows[0].Clone();
+            row.Cells[0].Value = currentTrap.tIPAddress;
+            row.Cells[1].Value = currentTrap.tTime;
+            row.Cells[2].Value = currentTrap.tCommunity;
 
-            MessageBox.Show("данные всего трапа:" + packet.Pdu.ToString());
 
-            try
+            int xx = 3;
+            foreach (ParserRule rls in parseConf.ruleList)
             {
-                //row.Cells[3].Value = packet.Pdu.VbList["1.3.6.1.4.1.4100.4.1.2.2.5.1.1.4.1150"].Value.ToString();
-                //MessageBox.Show("данные oid severity:" +packet.Pdu.VbList["1.3.6.1.4.1.4100.4.1.2.2.5.1.1.4.1150"].ToString());
-                
-                
-            }
-            catch(Exception e)
-            {
-                row.Cells[3].Value = "can't parse!";
-            }
+               
+                row.Cells[xx].Value = currentTrap.fields[rls.param];
 
-            //row.Cells[3].Value = "CLR";
+                if (row.Cells[xx].Value.ToString().Contains("MAJ"))
+                {
+                    row.Cells[xx].Style.ForeColor = Color.Red;
+                }                
+                else
+                {
+                    row.Cells[xx].Style.ForeColor = Color.Black;
+                }
 
-            try
-            {
-                row.Cells[4].Value = packet.Pdu.VbList["1.3.6.1.4.1.4100.4.1.2.2.5.1.1.11.1150"].Value.ToString(); 
-            }
-            catch(Exception e)
-            {
-                row.Cells[4].Value = "can't parse!";
-            }
-
-            row.Cells[5].Value = trapData;
+                xx++;
+            }                            
 
             TrapGrid.Rows.Add(row); 
         }
 
+        //показать форму настроек
         private void button2_Click(object sender, EventArgs e)
         {
             Form2 frm = new Form2(this);
@@ -140,130 +178,63 @@ namespace VilcomNetworkMonitor
             
         }
 
+        //открыть форму с подробной инфой о трапе
         private void TrapGrid_DoubleClick(object sender, EventArgs e)
         {
             Form4 trapWindow = new Form4(TrapGrid.CurrentRow.Cells);
             trapWindow.Show();
         }
 
-        public void listen()
+        /** запуск мониторинга **/
+        private void toolStripButton1_Click(object sender, EventArgs e)
         {
-            _debug(" мониторинг успешно запущен");
+            toolStripButtonStop.Enabled = true;
+            toolStripButtonStart.Enabled = false;
 
-            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-            IPEndPoint ipep = new IPEndPoint(IPAddress.Any, conf.port);
-            EndPoint ep = (EndPoint)ipep;
-            socket.Bind(ep);
-            // Disable timeout processing. Just block until packet is received 
-            //socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, 0);
+            //Client uses as receive udp client           
 
-
-
-            bool run = true;
-
-
-           
-
-
-            while (run)
+            try
             {
-
-
-                //System.Threading.Thread.Sleep((0);
-                byte[] indata = new byte[16 * 1024];
-                // 16KB receive buffer int inlen = 0;
-                IPEndPoint peer = new IPEndPoint(IPAddress.Any, 0);
-                EndPoint inep = (EndPoint)peer;
-                int inlen;
-                try
-                {
-                    inlen = socket.ReceiveFrom(indata, ref inep);
-                }
-                catch (Exception ex)
-                {
-                    _debug("Ошибка " + ex.Message);
-                    inlen = -1;
-                    break;
-                }
-                if (inlen > 0)
-                {
-                    // Check protocol version int 
-                    int ver;
-
-                    ver = SnmpPacket.GetProtocolVersion(indata, inlen);
-
-
-                    /*  
-                    if (ver == (int)SnmpVersion.Ver1)
-                    {
-                        // Parse SNMP Version 1 TRAP packet 
-                        SnmpV1TrapPacket pkt = new SnmpV1TrapPacket();
-                        pkt.decode(indata, inlen);
-                        _debug("** SNMP Version 1 TRAP received from {0}:"+ inep.ToString());
-                       /* Console.WriteLine("*** Trap generic: {0}", pkt.Pdu.Generic);
-                        Console.WriteLine("*** Trap specific: {0}", pkt.Pdu.Specific);
-                        Console.WriteLine("*** Agent address: {0}", pkt.Pdu.AgentAddress.ToString());
-                        Console.WriteLine("*** Timestamp: {0}", pkt.Pdu.TimeStamp.ToString());
-                        Console.WriteLine("*** VarBind count: {0}", pkt.Pdu.VbList.Count);
-                        Console.WriteLine("*** VarBind content:"); */
-                    /*     foreach (Vb v in pkt.Pdu.VbList)
-                         {
-                             Console.WriteLine("**** {0} {1}: {2}", v.Oid.ToString(), SnmpConstants.GetTypeName(v.Value.Type), v.Value.ToString());
-                         }
-                         Console.WriteLine("** End of SNMP Version 1 TRAP data.");
-                     }
-                     else
-                     { 
-                     */
-
-                    // Parse SNMP Version 2 TRAP packet 
-                    SnmpV2Packet pkt = new SnmpV2Packet();
-                    pkt.decode(indata, inlen);
-
-
-
-                    _debug("Получен TRAP с адреса" + inep.ToString());
-
-                    string trapData = "";
-
-                    foreach (Vb v in pkt.Pdu.VbList)
-                    {
-                        trapData = String.Concat(trapData, "**** " +
-                           v.Oid.ToString() + " " +
-                           SnmpConstants.GetTypeName(v.Value.Type) + " " +
-                           v.Value.ToString());
-                    }
-
-
-                    MessageBox.Show("111");
-
-
-
-                    addTrapToGrid(inep.ToString(), trapData, pkt);
-                   // break;
-
-
-                    _debug("** TRAP успешно разобран.");
-
-                    //continue;
-
-                    /*  }  */
-
-                    continue;
-                }
-                else
-                {
-                    if (inlen == 0)
-                        _debug("Получен некорректный TRAP нулевой длины");
-
-                }
-
-                //while end:
+                Client.BeginReceive(new AsyncCallback(recv), null);
             }
-
-                       
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+            //CallBack
         }
 
+        //остановка мониторинга
+        private void toolStripButtonStop_Click(object sender, EventArgs e)
+        {
+            toolStripButtonStart.Enabled = true;
+            toolStripButtonStop.Enabled = false;
+        }
 
+        //показать форму с настройками
+        private void toolStripButtonSettings_Click(object sender, EventArgs e)
+        {
+            Form2 frm = new Form2(this);
+            frm.Show(); 
+        }
+
+        private void toolStripButtonParser_Click(object sender, EventArgs e)
+        {
+            Form5 parserForm = new Form5();
+            parserForm.Show();
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            About aboutForm = new About();
+            aboutForm.Show();
+        }
+
+        
     }
 }
