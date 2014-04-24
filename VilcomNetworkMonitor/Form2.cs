@@ -42,7 +42,7 @@ namespace VilcomNetworkMonitor
 
         private void ConfCommunity_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
+
         }
     }
 }

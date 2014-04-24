@@ -31,8 +31,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(About));
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -57,16 +57,6 @@
             this.panel1.Size = new System.Drawing.Size(325, 39);
             this.panel1.TabIndex = 4;
             // 
-            // richTextBox1
-            // 
-            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.richTextBox1.Location = new System.Drawing.Point(0, 38);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(325, 106);
-            this.richTextBox1.TabIndex = 5;
-            this.richTextBox1.Text = "VilcomNetworkMonitor\nСистема мониторинга оборудования Vilcom Холдинг\nверсия 1.0 b" +
-                "eta\n\nhttp://www.vilcom.ru";
-            // 
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(128, 6);
@@ -76,6 +66,16 @@
             this.button1.Text = "okay";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBox1.Location = new System.Drawing.Point(0, 38);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(325, 106);
+            this.richTextBox1.TabIndex = 5;
+            this.richTextBox1.Text = "VilcomNetworkMonitor\nСистема мониторинга оборудования Vilcom Холдинг\nверсия 1.7al" +
+                "pha\n\n\nhttp://www.vilcom.ru";
             // 
             // About
             // 

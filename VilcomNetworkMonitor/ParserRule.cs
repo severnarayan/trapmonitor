@@ -11,12 +11,14 @@ namespace VilcomNetworkMonitor
         public string oid = "";
         public string name = "";
         public string param = "";
+        public string textPattern = "";
 
-        public ParserRule(string oidValue, string nameValue, string nameParam)
+        public ParserRule(string oidValue, string nameValue, string nameParam, string nameTextPattern)
         {
             oid = oidValue;
             name = nameValue;
             param = nameParam;
+            textPattern = nameTextPattern;
         }
     }
 }

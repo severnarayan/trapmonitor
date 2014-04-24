@@ -29,13 +29,13 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.ConfVersion = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.ConfPort = new System.Windows.Forms.ComboBox();
             this.ConfCommunity = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
+            this.ConfPort = new System.Windows.Forms.ComboBox();
+            this.ConfVersion = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -55,17 +55,25 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Настройки приема трапов";
             // 
-            // ConfVersion
+            // label3
             // 
-            this.ConfVersion.FormattingEnabled = true;
-            this.ConfVersion.Items.AddRange(new object[] {
-            "v1",
-            "v2"});
-            this.ConfVersion.Location = new System.Drawing.Point(126, 16);
-            this.ConfVersion.Name = "ConfVersion";
-            this.ConfVersion.Size = new System.Drawing.Size(71, 21);
-            this.ConfVersion.TabIndex = 2;
-            this.ConfVersion.Text = "v2";
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(16, 81);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(91, 13);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "SNMP community";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(126, 106);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(71, 23);
+            this.button1.TabIndex = 3;
+            this.button1.Text = "Сохранить";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // label2
             // 
@@ -85,27 +93,6 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "SNMP Trap Version";
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(126, 106);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(71, 23);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "Сохранить";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // ConfPort
-            // 
-            this.ConfPort.FormattingEnabled = true;
-            this.ConfPort.Items.AddRange(new object[] {
-            "162"});
-            this.ConfPort.Location = new System.Drawing.Point(126, 48);
-            this.ConfPort.Name = "ConfPort";
-            this.ConfPort.Size = new System.Drawing.Size(71, 21);
-            this.ConfPort.TabIndex = 4;
-            this.ConfPort.Text = "162";
-            // 
             // ConfCommunity
             // 
             this.ConfCommunity.FormattingEnabled = true;
@@ -119,15 +106,28 @@
             this.ConfCommunity.Text = "public";
             this.ConfCommunity.SelectedIndexChanged += new System.EventHandler(this.ConfCommunity_SelectedIndexChanged);
             // 
-            // label3
+            // ConfPort
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(16, 81);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(91, 13);
-            this.label3.TabIndex = 6;
-            this.label3.Text = "SNMP community";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
+            this.ConfPort.FormattingEnabled = true;
+            this.ConfPort.Items.AddRange(new object[] {
+            "162"});
+            this.ConfPort.Location = new System.Drawing.Point(126, 48);
+            this.ConfPort.Name = "ConfPort";
+            this.ConfPort.Size = new System.Drawing.Size(71, 21);
+            this.ConfPort.TabIndex = 4;
+            this.ConfPort.Text = "162";
+            // 
+            // ConfVersion
+            // 
+            this.ConfVersion.FormattingEnabled = true;
+            this.ConfVersion.Items.AddRange(new object[] {
+            "v1",
+            "v2"});
+            this.ConfVersion.Location = new System.Drawing.Point(126, 16);
+            this.ConfVersion.Name = "ConfVersion";
+            this.ConfVersion.Size = new System.Drawing.Size(71, 21);
+            this.ConfVersion.TabIndex = 2;
+            this.ConfVersion.Text = "v2";
             // 
             // Form2
             // 
@@ -136,7 +136,7 @@
             this.ClientSize = new System.Drawing.Size(232, 165);
             this.Controls.Add(this.groupBox1);
             this.Name = "Form2";
-            this.Text = "Конфигурация";
+            this.Text = "Исключения";
             this.Shown += new System.EventHandler(this.Form2_Shown);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -148,12 +148,12 @@
 
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.ComboBox ConfVersion;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox ConfPort;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox ConfCommunity;
+        private System.Windows.Forms.ComboBox ConfPort;
+        private System.Windows.Forms.ComboBox ConfVersion;
 
     }
 }

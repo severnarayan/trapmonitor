@@ -11,14 +11,35 @@ namespace VilcomNetworkMonitor
 {
     public partial class Form4 : Form
     {
-        public Form4(DataGridViewCellCollection data)
+
+        public Form4(string trapID, TrapList tList, Parser tParser)
         {
             InitializeComponent();
-            //richTextBox1.AppendText(data[5].Value.ToString());
-            textBox5.Text = data[0].Value.ToString();
-            textBox3.Text = data[3].Value.ToString();
-            textBox2.Text = data[4].Value.ToString();
-            textBox6.Text = data[1].Value.ToString();
+
+            Trap tmpTrap = tList.getTrapById(trapID);
+
+            textBox6.Text = tmpTrap.tTime;
+            textBox5.Text = tmpTrap.tIPAddress;
+
+            foreach (ParserRule rls in tParser.ruleList)
+            {
+                richTextBox1.AppendText(rls.name + " = " + tmpTrap.fields[rls.param] + Environment.NewLine);
+            }
+
+            richTextBox1.AppendText(Environment.NewLine + "Исходный трап:" + Environment.NewLine);
+            
+            try
+            {
+  
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Нет данных для отображения.");                
+            }
+
+            richTextBox1.AppendText(tmpTrap.trapSource.ToString());
+
+
         }
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
@@ -39,6 +60,16 @@ namespace VilcomNetworkMonitor
         private void button1_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form4_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

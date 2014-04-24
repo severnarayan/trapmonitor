@@ -106,7 +106,7 @@ namespace VilcomNetworkMonitor
                 {
                     // All the data has been read from the 
                     // client. Display it on the console.
-                    parent._debug("Read {0} bytes from socket. \n Data : {1}" + content);
+                    //parent._debug("Read {0} bytes from socket. \n Data : {1}" + content);
                     // Echo the data back to the client.                    
                 }
                 else

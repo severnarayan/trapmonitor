@@ -13,8 +13,25 @@ namespace VilcomNetworkMonitor
         [STAThread]
         static void Main()
         {
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            
+            Form6 p = new Form6();
+            Random rnd = new Random();
+            int timex = rnd.Next(1,5);
+
+            DateTime end = DateTime.Now + TimeSpan.FromSeconds(4 + timex);
+            p.Show();
+            while (end > DateTime.Now)
+            {
+                Application.DoEvents();
+            }
+            p.Close();
+            p.Dispose();     
+             
+
+
             Application.Run(new Form1());
         }
     }

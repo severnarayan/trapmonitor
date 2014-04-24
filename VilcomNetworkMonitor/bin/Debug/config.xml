@@ -3,5 +3,5 @@
   <port>162</port>
   <filename>config.xml</filename>
   <version>v2</version>
-  <community>private</community>
+  <community>public</community>
 </VilcomConfiguration>

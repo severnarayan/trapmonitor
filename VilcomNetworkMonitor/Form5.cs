@@ -23,7 +23,7 @@ namespace VilcomNetworkMonitor
                 for (int i = 0; i < pars.ruleList.Count; i++)
                 {
                     ParserRule rls = pars.ruleList[i];
-                    ParserGrid.Rows.Add(rls.oid, rls.name,rls.param);
+                    ParserGrid.Rows.Add(rls.oid, rls.name,rls.param,rls.textPattern);
                 }
             }
             catch (Exception e)
@@ -50,12 +50,26 @@ namespace VilcomNetworkMonitor
             for (int i = 0; i < ParserGrid.Rows.Count; i++)
             {
                 DataGridViewRow currentRow = ParserGrid.Rows[i];
-                try
+                if (currentRow.Cells[0].Value != null)
                 {
-                    pars.addRule(currentRow.Cells[0].Value.ToString(), currentRow.Cells[1].Value.ToString(), currentRow.Cells[2].Value.ToString());
-                }
-                catch(Exception exp)
-                {
+                    if (currentRow.Cells[1].Value == null)
+                        currentRow.Cells[1].Value = "";
+
+                    if (currentRow.Cells[2].Value == null)
+                        currentRow.Cells[2].Value = "";
+
+                    if (currentRow.Cells[3].Value == null)
+                        currentRow.Cells[3].Value = "";
+
+                    //pars.addRule(currentRow.Cells[0].Value.ToString(), currentRow.Cells[1].Value.ToString(), currentRow.Cells[2].Value.ToString(), currentRow.Cells[3].Value.ToString());
+                    try
+                    {
+                        pars.addRule(currentRow.Cells[0].Value.ToString(), currentRow.Cells[1].Value.ToString(), currentRow.Cells[2].Value.ToString(), currentRow.Cells[3].Value.ToString());
+                    }
+                    catch (Exception exp)
+                    {
+                        //MessageBox.Show("data" + currentRow.Cells[2].Value.ToString());
+                    }
                 }
                 
 

@@ -28,9 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.TrapGrid = new System.Windows.Forms.DataGridView();
             this.GridHostname = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cellTrapID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.GridTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.GridCommunity = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.button1 = new System.Windows.Forms.Button();
@@ -46,16 +48,27 @@
             this.HelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.CompanyInfoLabel = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonStart = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonStop = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonSettings = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonParser = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonExportCSV = new System.Windows.Forms.ToolStripButton();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.TrapGrid)).BeginInit();
             this.menuStrip1.SuspendLayout();
+            this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -64,14 +77,17 @@
             this.TrapGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.TrapGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.GridHostname,
+            this.cellTrapID,
             this.GridTime,
             this.GridCommunity});
             this.TrapGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TrapGrid.Location = new System.Drawing.Point(0, 140);
             this.TrapGrid.Name = "TrapGrid";
-            this.TrapGrid.Size = new System.Drawing.Size(769, 292);
+            this.TrapGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.TrapGrid.Size = new System.Drawing.Size(989, 331);
             this.TrapGrid.TabIndex = 0;
             this.TrapGrid.DoubleClick += new System.EventHandler(this.TrapGrid_DoubleClick);
+            this.TrapGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.TrapGrid_CellContentClick);
             // 
             // GridHostname
             // 
@@ -79,6 +95,11 @@
             this.GridHostname.HeaderText = "IP-адрес сервера";
             this.GridHostname.Name = "GridHostname";
             this.GridHostname.Width = 150;
+            // 
+            // cellTrapID
+            // 
+            this.cellTrapID.HeaderText = "Trap ID";
+            this.cellTrapID.Name = "cellTrapID";
             // 
             // GridTime
             // 
@@ -106,7 +127,7 @@
             this.TextLog.Dock = System.Windows.Forms.DockStyle.Top;
             this.TextLog.Location = new System.Drawing.Point(0, 51);
             this.TextLog.Name = "TextLog";
-            this.TextLog.Size = new System.Drawing.Size(769, 89);
+            this.TextLog.Size = new System.Drawing.Size(989, 89);
             this.TextLog.TabIndex = 4;
             this.TextLog.Text = "Сервис успешно запущен";
             // 
@@ -137,7 +158,7 @@
             this.помощьToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(769, 26);
+            this.menuStrip1.Size = new System.Drawing.Size(989, 26);
             this.menuStrip1.TabIndex = 7;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -156,12 +177,14 @@
             this.openListToolStripMenuItem.Name = "openListToolStripMenuItem";
             this.openListToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
             this.openListToolStripMenuItem.Text = "Открыть список";
+            this.openListToolStripMenuItem.Click += new System.EventHandler(this.openListToolStripMenuItem_Click);
             // 
             // saveListToolStripMenuItem
             // 
             this.saveListToolStripMenuItem.Name = "saveListToolStripMenuItem";
             this.saveListToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
             this.saveListToolStripMenuItem.Text = "Сохранить список";
+            this.saveListToolStripMenuItem.Click += new System.EventHandler(this.saveListToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
@@ -184,6 +207,7 @@
             this.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem";
             this.HelpToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
             this.HelpToolStripMenuItem.Text = "Краткая справка";
+            this.HelpToolStripMenuItem.Click += new System.EventHandler(this.HelpToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
@@ -195,11 +219,55 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.Window;
+            this.panel1.Controls.Add(this.pictureBox2);
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.CompanyInfoLabel);
+            this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 432);
+            this.panel1.Location = new System.Drawing.Point(0, 471);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(769, 37);
+            this.panel1.Size = new System.Drawing.Size(989, 37);
             this.panel1.TabIndex = 8;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.Location = new System.Drawing.Point(919, 3);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(66, 44);
+            this.pictureBox2.TabIndex = 7;
+            this.pictureBox2.TabStop = false;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(207, 20);
+            this.label1.Margin = new System.Windows.Forms.Padding(3, 0, 5, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(124, 13);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "© 1999-2013 «Вилком»";
+            // 
+            // CompanyInfoLabel
+            // 
+            this.CompanyInfoLabel.AutoSize = true;
+            this.CompanyInfoLabel.Location = new System.Drawing.Point(207, 3);
+            this.CompanyInfoLabel.Margin = new System.Windows.Forms.Padding(3, 0, 5, 0);
+            this.CompanyInfoLabel.Name = "CompanyInfoLabel";
+            this.CompanyInfoLabel.Size = new System.Drawing.Size(170, 13);
+            this.CompanyInfoLabel.TabIndex = 5;
+            this.CompanyInfoLabel.Text = "+7(495)9613443     info@vilcom.ru";
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.SystemColors.Window;
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(989, 38);
+            this.pictureBox1.TabIndex = 4;
+            this.pictureBox1.TabStop = false;
             // 
             // toolStrip1
             // 
@@ -208,12 +276,14 @@
             this.toolStripButtonStop,
             this.toolStripSeparator1,
             this.toolStripButtonSettings,
+            this.toolStripButton1,
             this.toolStripButtonParser,
             this.toolStripSeparator2,
-            this.toolStripButtonExportCSV});
+            this.toolStripButtonExportCSV,
+            this.toolStripLabel1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 26);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(769, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(989, 25);
             this.toolStrip1.TabIndex = 9;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -256,6 +326,16 @@
             this.toolStripButtonSettings.ToolTipText = "Настройки";
             this.toolStripButtonSettings.Click += new System.EventHandler(this.toolStripButtonSettings_Click);
             // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton1.Text = "Правила исключений";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click_1);
+            // 
             // toolStripButtonParser
             // 
             this.toolStripButtonParser.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -281,12 +361,25 @@
             this.toolStripButtonExportCSV.Size = new System.Drawing.Size(23, 22);
             this.toolStripButtonExportCSV.Text = "toolStripButton5";
             this.toolStripButtonExportCSV.ToolTipText = "Экспорт данных в Excel";
+            this.toolStripButtonExportCSV.Click += new System.EventHandler(this.toolStripButtonExportCSV_Click);
+            // 
+            // toolStripLabel1
+            // 
+            this.toolStripLabel1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripLabel1.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(0, 22);
+            // 
+            // timer1
+            // 
+            this.timer1.Interval = 1000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(769, 469);
+            this.ClientSize = new System.Drawing.Size(989, 508);
             this.Controls.Add(this.TrapGrid);
             this.Controls.Add(this.TextLog);
             this.Controls.Add(this.toolStrip1);
@@ -298,9 +391,16 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Vilcom Network SNMP Monitor";
+            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Shown += new System.EventHandler(this.Form1_Shown);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.TrapGrid)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -332,9 +432,18 @@
         private System.Windows.Forms.ToolStripButton toolStripButtonParser;
         private System.Windows.Forms.ToolStripButton toolStripButtonExportCSV;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.Label CompanyInfoLabel;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridViewTextBoxColumn GridHostname;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cellTrapID;
         private System.Windows.Forms.DataGridViewTextBoxColumn GridTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn GridCommunity;
+        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 
